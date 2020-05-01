@@ -2,14 +2,14 @@
 
 set -euo pipefail
 
-function build_libaio {
+build_libaio() {
   tar -zxf libaio_0.3.110.orig.tar.gz
   cd libaio-0.3.110
   make install
   cd -
 }
 
-function build_pxc8 {
+build_pxc8() {
   local boost_dir build_dir
 
   tar -xf Percona-XtraDB-Cluster-*.tar.gz
@@ -25,7 +25,6 @@ function build_pxc8 {
       -DCMAKE_INSTALL_PREFIX="${BOSH_INSTALL_TARGET}" \
       -DENABLED_LOCAL_INFILE=off \
       -DINSTALL_MYSQLTESTDIR= \
-      -DINSTALL_SBINDIR="${BOSH_INSTALL_TARGET}/sbin" \
       -DINSTALL_SECURE_FILE_PRIVDIR=NULL \
       -DINSTALL_STATIC_LIBRARIES=off \
       -DMYSQL_UNIX_ADDR=/var/vcap/sys/run/pxc-mysql/mysql.sock \
@@ -42,7 +41,7 @@ function build_pxc8 {
   cd -
 }
 
-function main {
+main() {
   build_libaio
   build_pxc8
 }
