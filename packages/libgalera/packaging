@@ -1,33 +1,53 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -e -o pipefail
+set -o errexit -o pipefail -o errtrace
 
-source /var/vcap/packages/python-2.7/bosh/compile.env
-
-set -u
-
-NPROC=$(nproc)
-
-tar -xf check/check-*.tar.gz
-pushd check-*/
-    ./configure --prefix=/usr
-    make -j "${NPROC}"
-    make -j "${NPROC}" install
-popd
-
-tar -xf boost/boost_1_59_0.tar.gz
-pushd boost_1_59_0
-    ./bootstrap.sh --with-libraries=program_options,system --prefix=/usr
-    ./b2 -j "${NPROC}" install
-popd
-
-tar -xf scons/scons-*.tar.gz
-pushd scons-*/
+build_scons() {
+  (
+    source /var/vcap/packages/python-2.7/bosh/compile.env
+    tar -xf scons/scons-*.tar.gz
+    cd scons-*/
     python setup.py install --prefix=/usr
-popd
+  )
+}
 
-tar -xf pxc/Percona-XtraDB-Cluster-*.tar.gz
-pushd Percona-XtraDB-Cluster-*/percona-xtradb-cluster-galera
-    HOME=$PWD scons tests=0
-    install --mode=0644 -D libgalera_smm.so "${BOSH_INSTALL_TARGET}/lib/libgalera_smm.so"
-popd
+build_libboost() {
+  (
+    tar -xf boost_*.tar.bz2
+    cd boost_*/
+    ./bootstrap.sh --with-libraries=program_options,system --prefix=/usr
+    ./b2 -j "$(nproc)" install
+  )
+}
+
+build_libcheck() {
+  (
+    tar -xf check/check-*.tar.gz
+    cd check-*/
+    ./configure --prefix=/usr
+    make -j "$(nproc)"
+    make -j "$(nproc)" install
+  )
+}
+
+build_libgalera() {
+  (
+    source /var/vcap/packages/python-2.7/bosh/compile.env
+    tar -xf Percona-XtraDB-Cluster-*.tar.gz
+    cd Percona-XtraDB-Cluster-*/percona-xtradb-cluster-galera
+    HOME="$PWD" \
+      scons psi=1 "revno=$(<GALERA-REVISION)" tests=0 libgalera_smm.so
+    install --mode=0644 \
+      -D libgalera_smm.so \
+      "${BOSH_INSTALL_TARGET}/lib/libgalera_smm.so"
+  )
+}
+
+main() {
+  build_scons
+  build_libcheck
+  build_libboost
+  build_libgalera
+}
+
+main

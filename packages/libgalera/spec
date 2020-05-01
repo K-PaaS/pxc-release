@@ -5,7 +5,7 @@ dependencies:
 - python-2.7
 
 files:
-- boost/boost_1_59_0.tar.gz
+- boost_*.tar.bz2
 - check/check-*.tar.gz
-- pxc/Percona-XtraDB-Cluster-*.tar.gz
+- Percona-XtraDB-Cluster-*.tar.gz
 - scons/scons-*.tar.gz

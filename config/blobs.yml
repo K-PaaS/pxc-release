@@ -1,32 +1,26 @@
-boost/boost_1_59_0.tar.gz:
-  size: 83709983
-  object_id: 10173ac0-034d-45d8-745c-1e43bda57f6e
-  sha: sha256:47f11c8844e579d02691a607fbd32540104a9ac7a2534a8ddaef50daf502baac
+Percona-XtraDB-Cluster-8.0.18-9.tar.gz:
+  size: 252508436
+  sha: sha256:2c326d3c248408720047ce0ca7fd7c1e39ca67b0727fdbaf150e7b6b1f872af1
+boost_1_70_0.tar.bz2:
+  size: 97887058
+  sha: sha256:430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb38778
 check/check-0.9.13.tar.gz:
   size: 752880
   object_id: 36e0876b-8632-42f4-59be-24375401f0e3
   sha: sha256:ca6589c34f9c60ffd4c3e198ce581e944a9f040ca9352ed54068dd61bebb5cb7
-libaio/libaio_0.3.110.orig.tar.gz:
+libaio_0.3.110.orig.tar.gz:
   size: 42270
-  object_id: ffce712d-c4f3-4a3b-764a-42f949b43ad3
   sha: sha256:e019028e631725729376250e32b473012f7cb68e1f7275bfc1bbcdd0f8745f7e
-libev/libev-4.22.tar.gz:
-  size: 530094
-  object_id: 5d805f33-4078-43f4-7576-2126c5af22ff
-  sha: sha256:b7234a886b636e33691b95ba048f008dc79a5c9a02c7535157a90474448dba8c
-pxc/Percona-XtraDB-Cluster-5.7.28-31.41.tar.gz:
-  size: 80210994
-  object_id: 36460057-1e62-440c-4894-2a9aae6e6d4a
-  sha: sha256:11e419efe3d23ec566b20288b4f45e339126932897a363ca348217d2794b25c7
+libev-4.27.tar.gz:
+  size: 556658
+  sha: sha256:2d5526fc8da4f072dd5c73e18fbb1666f5ef8ed78b73bba12e195cfdd810344e
+percona-xtrabackup-8.0.11.tar.gz:
+  size: 201376936
+  sha: sha256:070bef154b5b4307374bc0b2d65d01f2957d3845c0ee1821565cf91775a86348
 scons/scons-3.0.1.tar.gz:
   size: 634815
   object_id: 4860d0ee-98ef-4bf7-4f75-dc51f18736dd
   sha: 498691cf8d4f6da971b99fab0c3480ef944c4d1e
-socat/socat-1.7.3.2.tar.gz:
-  size: 611707
-  object_id: cf19cdec-2193-44ad-7c02-66f037e9a03c
-  sha: sha256:ce3efc17e3e544876ebce7cd6c85b3c279fda057b2857fcaaf67b9ab8bdaf034
-xtrabackup/percona-xtrabackup-2.4.18.tar.gz:
-  size: 59824645
-  object_id: 8b2dff8c-02ed-4e84-4011-2bbbece02f6d
-  sha: sha256:e33c5efb7215e094aeb8e32f57ad2af011da4977b343b4f46ab4d5e42ae1f6f9
+socat-1.7.3.4.tar.gz:
+  size: 615381
+  sha: sha256:d9ed2075abed7b3ec9730ed729b4c8e287c502181c806d4487020418a6e2fc36

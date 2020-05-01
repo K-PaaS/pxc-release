@@ -1,32 +1,56 @@
 #!/bin/bash
-set -eu
 
-NPROC=$(nproc)
+set -euo pipefail
 
-## boost (percona-xtrabackup dependency)
-tar -xf boost/boost_1_59_0.tar.gz
+build_libaio() {
+  tar -zxf libaio_0.3.110.orig.tar.gz
+  cd libaio-0.3.110
+    make install
+  cd -
+}
 
-## libaio
-tar -xf libaio/libaio_*.orig.tar.gz
-make -j "${NPROC}" -C libaio-*/ install
+build_libev() {
+  ## libev (percona-xtrabackup -> xbcloud dependency)
+  tar -xf libev-*.tar.gz
+  cd libev-*/
+    ./configure --prefix="${BOSH_INSTALL_TARGET}" --disable-static
+    make -j "$(nproc)"
+    make -j "$(nproc)" install
+  cd -
+}
 
-## libev (percona-xtrabackup -> xbcloud dependency)
-tar -xf libev/libev-*.tar.gz
-pushd libev-*/
-  ./configure --prefix=/usr --disable-static
-  make -j "${NPROC}"
-  make -j "${NPROC}" install
-popd
+build_percona_xtrabackup() {
+  local boost_dir build_dir
 
-## percona-xtrabackup
-tar -xf xtrabackup/percona-xtrabackup-*.tar.gz
-pushd percona-xtrabackup-*/
-    cmake \
-        -DBUILD_CONFIG=xtrabackup_release \
-        -DCMAKE_INSTALL_PREFIX=${BOSH_INSTALL_TARGET} \
-        -DWITH_BOOST=../boost_1_59_0/ \
-        -DINSTALL_MYSQLTESTDIR= \
-        -DWITH_MAN_PAGES=OFF
-    make -j "${NPROC}"
-    make -j "${NPROC}" install
-popd
+  tar -xf percona-xtrabackup-*.tar.gz
+  tar -xf boost_1_*.tar.bz2
+
+  boost_dir=$(cd boost_1_*/ && pwd)
+  build_dir=$(mktemp --directory --tmpdir=. build.XXXXXXXXXX)
+
+  cd "${build_dir}"
+    LDFLAGS="-Wl,-rpath,${BOSH_INSTALL_TARGET}/lib" \
+    cmake ../percona-xtrabackup-*/ \
+      -DBUILD_CONFIG=xtrabackup_release \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX="${BOSH_INSTALL_TARGET}" \
+      -DINSTALL_MYSQLTESTDIR= \
+      -DINSTALL_STATIC_LIBRARIES=off \
+      -DMYSQL_UNIX_ADDR=/var/vcap/sys/run/pxc-mysql/mysql.sock \
+      -DMYSQL_DATADIR=/var/vcap/store/pxc-mysql \
+      -DSYSCONFDIR=/var/vcap/jobs/pxc-mysql/config \
+      -DWITH_BOOST="${boost_dir}" \
+      -DWITH_VERSION_CHECK=OFF
+
+    make --jobs "$(nproc)"
+    make --jobs "$(nproc)" install
+  cd -
+}
+
+function main() {
+    build_libaio
+    build_libev
+    build_percona_xtrabackup
+}
+
+main
