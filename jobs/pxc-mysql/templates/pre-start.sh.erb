@@ -86,6 +86,12 @@ fi
 ln -sf ${PXC_JOB_DIR}/config/pxc-sudoers /etc/sudoers.d/pxc-sudoers
 chmod 440 /etc/sudoers.d/pxc-sudoers
 
+### HACK: Setup xtrabackup in the correct paths for wsrep_sst_xtrabackup-v2
+mkdir -p /var/vcap/packages/pxc/bin/pxc_extra/pxb-{2.4,8.0}/
+### Fake xb 2.4 - currently on build 8.0. PXC should never use it except for upgrades...
+ln -sf /var/vcap/packages/percona-xtrabackup/bin /var/vcap/packages/pxc/bin/pxc_extra/pxb-2.4/
+ln -sf /var/vcap/packages/percona-xtrabackup/bin /var/vcap/packages/pxc/bin/pxc_extra/pxb-8.0/
+
 rm -f /etc/profile.d/disable_mysql_cli_history.sh
 <% unless p('cli_history') %>
 ln -sf ${PXC_JOB_DIR}/config/disable_mysql_cli_history.sh /etc/profile.d/disable_mysql_cli_history.sh
