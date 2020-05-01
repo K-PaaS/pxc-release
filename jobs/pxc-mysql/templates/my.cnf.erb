@@ -45,6 +45,7 @@ ssl-key=/var/vcap/jobs/pxc-mysql/certificates/server-key.pem
 <% if p('engine_config.galera.enabled') %>
 # GALERA options:
 pxc-strict-mode                 = MASTER
+pxc-encrypt-cluster-traffic     = OFF
 wsrep_cluster_address           = gcomm://<%= instance_addresses.join(",") %>
 wsrep_cluster_name              = <%= p('engine_config.galera.cluster_name') %>
 wsrep_debug                     = NONE
