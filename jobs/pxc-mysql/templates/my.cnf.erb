@@ -35,6 +35,9 @@ socket                          = <%= "#{base_folder}/mysqld.sock" %>
 !include                        /var/vcap/jobs/pxc-mysql/config/auto-tune.cnf
 
 [mysqld]
+# https://mysqlserverteam.com/upgrading-to-mysql-8-0-default-authentication-plugin-considerations/
+default-authentication-plugin   = mysql_native_password
+
 server-id                       = <%= p('engine_config.server_id') %>
 <%- if_p('tls.client.ca') do -%>
 ssl-ca=/var/vcap/jobs/pxc-mysql/certificates/client-ca.pem
