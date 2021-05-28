@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/cloudfoundry/gosigar v1.1.0
-	github.com/go-sql-driver/mysql v1.3.0
+        github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.3.5 // indirect
 	github.com/onsi/ginkgo v1.4.0
 	github.com/onsi/gomega v1.3.0
