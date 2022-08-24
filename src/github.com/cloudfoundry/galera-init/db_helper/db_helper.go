@@ -58,10 +58,15 @@ var BuildUserSeeder = func(db *sql.DB, logger lager.Logger) UserSeeder {
 
 func FormatDSN(config config.DBHelper) string {
 	skipBinLog := ""
+	allowNativePasswords := ""
+
 	if config.SkipBinlog {
 		skipBinLog = "?sql_log_bin=off"
+		allowNativePasswords = "&allowNativePasswords=true"
+	} else {
+        allowNativePasswords = "?allowNativePasswords=true"
 	}
-	return fmt.Sprintf("%s:%s@unix(%s)/%s", config.User, config.Password, config.Socket, skipBinLog)
+	return fmt.Sprintf("%s:%s@unix(%s)/%s%s", config.User, config.Password, config.Socket, skipBinLog, allowNativePasswords)
 }
 
 // Overridable methods to allow mocking DB connections in tests
