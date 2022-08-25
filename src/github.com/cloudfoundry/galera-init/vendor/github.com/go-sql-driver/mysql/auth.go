@@ -274,7 +274,7 @@ func (mc *mysqlConn) auth(authData []byte, plugin string) ([]byte, error) {
 		if len(mc.cfg.Passwd) == 0 {
 			return []byte{0}, nil
 		}
-		if mc.cfg.tls != nil || mc.cfg.Net == "unix" {
+		if mc.cfg.tls != nil {
 			// write cleartext auth packet
 			return append([]byte(mc.cfg.Passwd), 0), nil
 		}
